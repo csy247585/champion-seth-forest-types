@@ -276,46 +276,91 @@ const filtered=()=>GEO.filter(geoMatch);
 // Champion & Seth (1968), A Revised Survey of the Forest Types of India.
 const DEFS={
   name:`Search by the name printed in Champion &amp; Seth, or by the accepted name in WCVP
-    (World Checklist of Vascular Plants, Royal Botanic Gardens, Kew). Many 1968 names are now
-    outdated, so both are searched.
-    <span class="src">WCVP names come from the species-points data.</span>`,
-  bc:`The broadest division. Champion &amp; Seth arrange all forest types under six classes that
-    combine temperature and moisture: Moist Tropical, Dry Tropical, Montane Subtropical, Montane
-    Temperate, Sub-Alpine and Alpine Scrub. The temperature zones are set by mean annual
-    temperature: tropical above 24&nbsp;°C, subtropical 17–24&nbsp;°C, temperate 7–17&nbsp;°C,
-    alpine below 7&nbsp;°C, with a matching scale for January temperature.
-    <span class="src">Champion &amp; Seth 1968, p.&nbsp;7 (temperature zones); pp.&nbsp;48–56 (arrangement).</span>`,
-  grp:`One of the 16 type-groups, numbered 1 to 16, into which the forest types are collected,
-    for example Group 5, Tropical Dry Deciduous Forests. A group is split geographically into
-    sub-groups (5A southern, 5B northern), and sub-groups into the individual forest types.
-    Only groups within the selected bioclimate classes are listed.
-    <span class="src">Champion &amp; Seth 1968, p.&nbsp;1 (sub-groups); pp.&nbsp;48–56 (list of groups).</span>`,
-  lvl:`Where the site's forest type stands in succession, shown by the code at the start of the type name.
-    <dl><dt>Climax (C)</dt><dd>The relatively stable forest of the area.</dd>
-    <dt>Edaphic (E, TS, FS, SS, L)</dt><dd>Kept different from the surrounding climax by a definite
-      site factor such as soil, drainage or waterlogging. Swamp and littoral types are included here.</dd>
-    <dt>Seral (1S, 2S)</dt><dd>A stage on the way to the climax: 1S on new ground (primary
-      succession), 2S where earlier vegetation was removed (secondary succession).</dd>
-    <dt>Degradation stage (DS)</dt><dd>Forest reduced by grazing, lopping or felling. It
-      recovers towards the climax under protection.</dd></dl>
-    <span class="src">Champion &amp; Seth 1968, p.&nbsp;1 (edaphic), p.&nbsp;5 (climax), pp.&nbsp;43–44 (seral, degradation).</span>`,
-  eco:`Not a Champion &amp; Seth category. The terrestrial ecoregion that the site's coordinates
-    fall in, taken from the ECO_NAME field of the species-points data.`,
-  strat:`The layer of the forest a species is listed under in the book's species lists.
-    <dl><dt>I</dt><dd>Top canopy trees</dd><dt>II</dt><dd>Second storey trees</dd>
-    <dt>IIa</dt><dd>Bamboos</dd><dt>III</dt><dd>Shrubs</dd><dt>IVa</dt><dd>Herbs</dd>
-    <dt>IVb</dt><dd>Grasses</dd><dt>V</dt><dd>Climbers</dd></dl>
-    Epiphytes and parasites are listed separately.
-    <span class="src">Champion &amp; Seth 1968, p.&nbsp;xxvii.</span>`,
-  ab:`How plentiful a species is at the site, from the code printed after its name:
-    very abundant (va), abundant (a), locally abundant (la), common (c), locally common (lc),
-    frequent (f), occasional (o), rare (r). The scale is descriptive; the book gives no counts
-    or percentages for it.
-    <span class="src">Champion &amp; Seth 1968, p.&nbsp;xxvii.</span>`,
+    (World Checklist of Vascular Plants, Royal Botanic Gardens, Kew).`,
+  bc:`The Major Group: the broadest division of Indian forests, set by temperature and moisture.
+    Temperature runs through four zones — Tropical (mean annual over 24&nbsp;°C, no frost),
+    Subtropical (17–24&nbsp;°C, cool winter, frost rare), Temperate (7–17&nbsp;°C, pronounced winter
+    with frost and snow) and Alpine (under 7&nbsp;°C, severe winter with much snow). The Tropical
+    zone is split into Moist and Dry, since moisture in the growing season is the most important
+    factor in what vegetation can exist.
+    <dl><dt>Moist Tropical</dt><dd>Higher-rainfall tropical forests.</dd>
+    <dt>Dry Tropical</dt><dd>Tropical forests with lower rainfall and a long dry season.</dd>
+    <dt>Montane Subtropical</dt><dd>Subtropical forests, mainly on hill tracts.</dd>
+    <dt>Montane Temperate</dt><dd>Temperate forests of the higher hills.</dd>
+    <dt>Sub-Alpine</dt><dd>Transition from temperate to alpine; stunted forest near the timber limit.</dd>
+    <dt>Alpine Scrub</dt><dd>Above the timber limit.</dd></dl>`,
+  grp:`Bioclimatic class is divided into groups based on character and appearance of the forest`,
+  lvl:`The ecological status of the site's Type, given by the letter code at the start of its
+    Type code. It tells you whether the vegetation is the stable forest the climate supports, a
+    stable variant held by the soil, a temporary stage on the way to something else, or a
+    condition produced by human interference.
+    <dl><dt>Climatic climax (C)</dt><dd>The stable, self-maintaining forest the climate supports
+      on ordinary, well-drained sites of medium depth and fertility. If left alone indefinitely,
+      the site keeps this forest.</dd>
+    <dt>Edaphic climax (E, and the swamp/littoral codes L, TS, FS, SS)</dt><dd>A stable community
+      that differs from the climatic climax because the soil holds it there permanently — the
+      climate could support something else, but waterlogging, salinity, laterite, shallow rocky
+      ground or heavy clay prevent that. Like a climatic climax, it will not change on its own.</dd>
+    <dt>Primary seral (1S)</dt><dd>An intermediate community that started on bare ground with no
+      soil, seed bank or roots — new river alluvium, sand dune, landslide, glacial deposit — and is
+      still on its way to a climax.</dd>
+    <dt>Secondary seral (2S)</dt><dd>An intermediate community regenerating where an earlier
+      community was destroyed but the soil, seeds and root stocks remain, so recovery is faster
+      than in a primary sere.</dd>
+    <dt>Riparian (RS)</dt><dd>A seral community of stream and river margins where the water
+      regime keeps succession in a particular state.</dd>
+    <dt>Degradation stage (DS)</dt><dd>Forest reduced in height, density or composition by
+      sustained human pressure — overgrazing, repeated burning, lopping for fodder or fuel,
+      unregulated felling. Recoverable: remove the pressure and the forest will grow back.</dd></dl>`,
+  eco:` ecoregions represent distinct assemblages of biodiversity-all taxa, not just vegetation-whose boundaries include the space required to sustain ecological processes. Ecoregions provide a useful basemap for conservation planning in particular because they draw on natural, rather than political, boundaries, define distinct biogeographic assemblages and ecological habitats within biomes, and assist in representation of Earth's biodiversity.`,
+  strat:`The Species Group: the vertical layer of the forest that a species is listed in.
+    Champion &amp; Seth number these with Roman numerals.
+    <dl><dt>I — Top canopy trees</dt><dd>The uppermost continuous layer; the dominant trees that
+      form the main canopy and receive full sunlight.</dd>
+    <dt>II — Second storey trees</dt><dd>Smaller trees growing beneath the main canopy,
+      shade-tolerant or waiting to replace canopy trees.</dd>
+    <dt>IIa — Bamboos</dt><dd>Kept separate from the second storey because their growth form,
+      phenology and behaviour differ fundamentally from broadleaved trees; often form dense
+      gregarious patches that suppress other vegetation.</dd>
+    <dt>III — Shrubs</dt><dd>Woody plants of low stature forming the understorey beneath both
+      canopy layers.</dd>
+    <dt>IVa — Herbs</dt><dd>Non-woody flowering plants of the ground layer, excluding grasses.</dd>
+    <dt>IVb — Grasses</dt><dd>Graminoids of the ground layer, listed separately because their
+      response to light, fire and grazing differs from that of broadleaved herbs and they are
+      ecologically diagnostic of open or disturbed conditions.</dd>
+    <dt>V — Climbers</dt><dd>Woody or herbaceous plants that use other plants for mechanical
+      support; lianas and rattan canes are the most conspicuous in Indian tropical forests.</dd>
+    <dt>Epi. — Epiphytes</dt><dd>Plants growing on other plants for support but drawing no
+      nutrition from the host — orchids, ferns, mosses, lichens. Their presence signals canopy
+      continuity and air humidity.</dd>
+    <dt>Par. — Parasites</dt><dd>Plants that attach to a host and take water or nutrients from it
+      — Loranthus, Viscum, Cassytha.</dd></dl>`,
+  ab:`The surveyor's field impression of how often and in what quantity the species is met with
+    in the stand. It is an ordinal visual estimate, not a measurement of density or cover, and is
+    calibrated relative to the stand.
+    <dl><dt>Very abundant (va)</dt><dd>Met with in very large numbers throughout the stand; a
+      conspicuous mass of the vegetation, near-dominant in its stratum.</dd>
+    <dt>Abundant (a)</dt><dd>Present in large numbers across most of the stand; a major
+      component of its stratum but not overwhelming other species.</dd>
+    <dt>Locally abundant (la)</dt><dd>Abundant within restricted patches — dense where it
+      occurs, but confined to particular localities such as a valley bottom, stream margin or
+      soil type, and absent or scarce elsewhere in the same stand.</dd>
+    <dt>Common (c)</dt><dd>Widespread in the type across its range; regularly present but not
+      necessarily at high density at any one site.</dd>
+    <dt>Locally common (lc)</dt><dd>Common within restricted patches but confined to particular
+      localities and absent or scarce elsewhere.</dd>
+    <dt>Frequent (f)</dt><dd>Encountered repeatedly and regularly as one moves through the
+      stand; never surprising to find, but not massed.</dd>
+    <dt>Occasional (o)</dt><dd>Present but not regularly encountered; scattered individuals or
+      patches, so that one could move through part of the stand without meeting it.</dd>
+    <dt>Rare (r)</dt><dd>Only isolated individuals or a very few spots within the stand; easily
+      missed.</dd></dl>
+    The "locally" modifier (la, lc) records that a species is patchy rather than diffuse —
+    concentrated where site conditions favour it, absent from the rest. A species marked (la)
+    often signals an edaphic or microtopographic control within an otherwise uniform stand.`,
   star:`An asterisk against a name marks the species as particularly characteristic of the forest
-    type. It says how typical the species is of the type, not how plentiful it is, so it is
-    recorded separately from abundance.
-    <span class="src">Champion &amp; Seth 1968, p.&nbsp;xxvii.</span>`
+    type. It records how typical the species is of the type, not how plentiful it is at the site,
+    so it is kept separate from abundance.`
 };
 const openDefs=new Set();
 function head(label,key){
