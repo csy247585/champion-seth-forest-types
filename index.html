@@ -24,11 +24,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:
 button,input,textarea,select{font:inherit;color:inherit}
 
 /* ---------- three columns ---------- */
-.shell{display:grid;grid-template-columns:262px var(--w2,328px) 8px minmax(0,1fr);height:100vh}
-.rail{border-right:1px solid var(--rule);display:flex;flex-direction:column;min-height:0}
+.shell{display:grid;grid-template-columns:var(--w1,262px) 8px var(--w2,328px) 8px minmax(0,1fr);height:100vh}
+.rail{display:flex;flex-direction:column;min-height:0;overflow:hidden}
 .listcol{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden}
 .mapcol{position:relative;min-width:0;overflow:hidden}
-.panewrap{grid-column:2/5;overflow-y:auto;min-width:0;display:none}
+.panewrap{grid-column:3/6;overflow-y:auto;min-width:0;display:none}
 
 /* ---------- divider between site panel and map ---------- */
 .splitter{position:relative;cursor:col-resize;touch-action:none;background:var(--paper);
@@ -155,7 +155,7 @@ select.inl{padding:7px 9px;border:1px solid var(--rule);border-radius:2px;backgr
 .map-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
 
 @media (max-width:1100px){
-  .shell{grid-template-columns:230px var(--w2,280px) 8px minmax(0,1fr)}
+  .shell{grid-template-columns:var(--w1,230px) 8px var(--w2,280px) 8px minmax(0,1fr)}
 }
 @media (max-width:860px){
   .splitter{display:none!important}
@@ -182,13 +182,15 @@ select.inl{padding:7px 9px;border:1px solid var(--rule);border-radius:2px;backgr
     </div>
     <div class="facets" id="facets"></div>
   </aside>
+  <div class="splitter" id="splitter1" role="separator" aria-orientation="vertical" tabindex="0"
+    aria-label="Resize the filter panel and the site panel" title="Drag to resize. Double-click to reset."></div>
   <section class="listcol" id="listcol">
     <div class="sortbar" id="sortbar"></div>
     <div class="list" id="list"></div>
     <div class="detailhead" id="detailhead"><button class="backbtn" id="backbtn">← All sites</button></div>
     <div class="detailbody" id="detailbody"></div>
   </section>
-  <div class="splitter" id="splitter" role="separator" aria-orientation="vertical" tabindex="0"
+  <div class="splitter" id="splitter2" role="separator" aria-orientation="vertical" tabindex="0"
     aria-label="Resize the site panel and the map" title="Drag to resize. Double-click to reset."></div>
   <main class="mapcol" id="mapcol"><div id="mapwrap"><div id="map"></div></div></main>
   <div class="panewrap" id="panewrap"><div class="pane" id="pane"></div></div>
@@ -683,34 +685,40 @@ function runIdentify(){
   const res=document.getElementById("res"); res.innerHTML=h; wire(res);
 }
 
-/* ---------------- divider between site panel and map ---------------- */
-const MIN_LIST=240, MIN_MAP=260;
-let wList=328, wDetail=null;           // null = default for the open-site view
-function spaceForPanels(){
-  const shell=document.getElementById("shell").getBoundingClientRect().width;
-  const rail=document.querySelector(".rail").getBoundingClientRect().width;
-  return shell-rail-8;                  // 8px = divider
-}
-function clampWidth(w){ return Math.max(MIN_LIST, Math.min(w, spaceForPanels()-MIN_MAP)); }
-function applyWidth(){
-  const w = selected!=null ? (wDetail ?? Math.round(spaceForPanels()*0.6)) : wList;
-  document.getElementById("shell").style.setProperty("--w2", clampWidth(w)+"px");
+/* ---------------- draggable dividers ---------------- */
+const MIN_RAIL=200, MIN_LIST=240, MIN_MAP=260, DIV=8;
+const DEFAULT_RAIL=262, DEFAULT_LIST=328;
+let wRail=DEFAULT_RAIL, wList=DEFAULT_LIST, wDetail=null; // null = default open-site width
+
+function shellWidth(){ return document.getElementById("shell").getBoundingClientRect().width; }
+function spaceForSitesAndMap(){ return shellWidth()-wRail-2*DIV; }
+function currentListWidth(){ return selected!=null ? (wDetail ?? Math.round(spaceForSitesAndMap()*0.6)) : wList; }
+
+function applyWidths(){
+  // clamp rail first, then the site column against what is left
+  wRail=Math.max(MIN_RAIL, Math.min(wRail, shellWidth()-2*DIV-MIN_LIST-MIN_MAP));
+  const w2=Math.max(MIN_LIST, Math.min(currentListWidth(), spaceForSitesAndMap()-MIN_MAP));
+  const shell=document.getElementById("shell");
+  shell.style.setProperty("--w1", wRail+"px");
+  shell.style.setProperty("--w2", w2+"px");
   if(leafMap) requestAnimationFrame(()=>leafMap.invalidateSize());
 }
-function setWidth(w){
-  w=clampWidth(w);
+function setRailWidth(w){ wRail=w; applyWidths(); }
+function setListWidth(w){
+  w=Math.max(MIN_LIST, Math.min(w, spaceForSitesAndMap()-MIN_MAP));
   if(selected!=null) wDetail=w; else wList=w;
-  applyWidth();
+  applyWidths();
 }
-(function initSplitter(){
-  const sp=document.getElementById("splitter"), col=document.getElementById("listcol");
+
+function initSplitter(id, getW, setW, resetFn){
+  const sp=document.getElementById(id);
   sp.addEventListener("pointerdown",e=>{
     e.preventDefault(); sp.setPointerCapture(e.pointerId);
     sp.classList.add("drag"); document.body.classList.add("dragging");
   });
   sp.addEventListener("pointermove",e=>{
     if(!sp.hasPointerCapture(e.pointerId)) return;
-    setWidth(e.clientX-col.getBoundingClientRect().left);
+    setW(e);
   });
   const end=e=>{
     if(sp.hasPointerCapture(e.pointerId)) sp.releasePointerCapture(e.pointerId);
@@ -719,13 +727,36 @@ function setWidth(w){
   };
   sp.addEventListener("pointerup",end); sp.addEventListener("pointercancel",end);
   sp.addEventListener("keydown",e=>{
-    const cur=col.getBoundingClientRect().width;
-    if(e.key==="ArrowLeft"){e.preventDefault(); setWidth(cur-24);}
-    if(e.key==="ArrowRight"){e.preventDefault(); setWidth(cur+24);}
+    if(e.key==="ArrowLeft"){e.preventDefault(); setW({clientX:getW()-24,__abs:true});}
+    if(e.key==="ArrowRight"){e.preventDefault(); setW({clientX:getW()+24,__abs:true});}
   });
-  sp.addEventListener("dblclick",()=>{ if(selected!=null) wDetail=null; else wList=328; applyWidth(); });
-  window.addEventListener("resize",applyWidth);
+  sp.addEventListener("dblclick",resetFn);
+}
+
+(function initAllSplitters(){
+  const rail=document.querySelector(".rail"), listcol=document.getElementById("listcol");
+  // splitter 1: filters | sites
+  initSplitter("splitter1",
+    ()=>rail.getBoundingClientRect().width,
+    e=>{
+      const railLeft=rail.getBoundingClientRect().left;
+      const w=(e.__abs?e.clientX:(e.clientX-railLeft));
+      setRailWidth(w);
+    },
+    ()=>{ wRail=DEFAULT_RAIL; applyWidths(); });
+  // splitter 2: sites | map
+  initSplitter("splitter2",
+    ()=>listcol.getBoundingClientRect().width,
+    e=>{
+      const colLeft=listcol.getBoundingClientRect().left;
+      const w=(e.__abs?e.clientX:(e.clientX-colLeft));
+      setListWidth(w);
+    },
+    ()=>{ if(selected!=null) wDetail=null; else wList=DEFAULT_LIST; applyWidths(); });
+  window.addEventListener("resize",applyWidths);
 })();
+// keep the name that the rest of the code uses
+function applyWidth(){ applyWidths(); }
 
 /* ---------------- plumbing ---------------- */
 function renderPane(h){const p=document.getElementById("pane"); p.innerHTML=h; wire(p);
@@ -742,7 +773,8 @@ function setTab(t,quiet){
   const sites=t==="sites";
   document.getElementById("listcol").style.display=sites?"flex":"none";
   document.getElementById("mapcol").style.display=sites?"block":"none";
-  document.getElementById("splitter").style.display=sites?"":"none";
+  document.getElementById("splitter1").style.display=sites?"":"none";
+  document.getElementById("splitter2").style.display=sites?"":"none";
   document.getElementById("panewrap").style.display=sites?"none":"block";
   document.getElementById("facets").style.display=t==="identify"?"none":"";
   if(sites){initMap(); refreshMap();}
