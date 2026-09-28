@@ -17,7 +17,7 @@ The browser is derived from two primary sources.
 
 1. **Champion, H. G. and Seth, S. K. (1968).** *A Revised Survey of the Forest Types of India.* Manager of Publications, Government of India, Delhi. The forest-type classification (16 groups, sub-groups, individual types with their successional codes), the site-level floristic lists, the species-group notation (I–V, Epi, Par), the abundance codes (va, a, la, c, lc, f, o, r) and the asterisk marking characteristic species all come from this volume.
 
-2. **Species-points geospatial layer.** A GeoJSON file that pairs species records from the 1968 volume with site coordinates, terrestrial ecoregion (Ecoregions 2017 / RESOLVE, Dinerstein *et al.* 2017), a Champion & Seth species name and an accepted name from WCVP. This layer taken from "Champion & Seth Species Dataset: AI-Assisted Geocoding and an Interactive WebGIS Search Interface" created by Kumar Pandey, Anand and team.
+2. **Species-points geospatial layer.** A GeoJSON file that pairs species records from the 1968 volume with site coordinates, terrestrial ecoregion (Ecoregions 2017 / RESOLVE, Dinerstein *et al.* 2017), a Champion & Seth species name and an accepted name from WCVP. This layer is taken from "Champion & Seth Species Dataset: AI-Assisted Geocoding and an Interactive WebGIS Search Interface" created by Anand kr. Pandey and team.
 
 Accepted names follow **World Checklist of Vascular Plants (WCVP)**, Royal Botanic Gardens, Kew (Govaerts *et al.* 2021, ongoing; https://powo.science.kew.org).
 
