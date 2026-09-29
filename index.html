@@ -601,9 +601,16 @@ let leafMap=null, layer=null;
 function initMap(){
   if(leafMap) return;
   leafMap=L.map("map").setView([22.5,80],5);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",{
-    attribution:'&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://osm.org/copyright">OpenStreetMap</a>',
-    maxZoom:19,subdomains:"abcd"}).addTo(leafMap);
+  // Two key-free basemaps from Esri. Terrain is the default; switch in the top-right.
+  const terrain=L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom:19,attribution:'Tiles &copy; Esri'});
+  const satellite=L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom:19,attribution:'Tiles &copy; Esri, Maxar, Earthstar Geographics'});
+  terrain.addTo(leafMap);
+  L.control.layers({"Terrain":terrain,"Satellite":satellite},null,
+    {position:"topright",collapsed:true}).addTo(leafMap);
   layer=L.layerGroup().addTo(leafMap);
   const leg=L.control({position:"bottomright"});
   leg.onAdd=()=>{const d=L.DomUtil.create("div","map-legend");
@@ -891,7 +898,6 @@ The parsed and enriched site list is embedded inside the HTML file as a JavaScri
 ## Acknowledgements
 We are grateful to Anand Kr. Pandey, Kiran Baldwin, Shashank Bhardwaj and Paul Blanchflower of the Auroville Botanical Gardens, and to Madhura Niphadkar of the Wildlife Conservation Trust, for helpful discussions and for the inspiration to build this browser.
 
-## Licence`;
 
 // Small markdown -> HTML renderer: headings, lists, blockquotes, fenced code,
 // inline code, bold, italic, links, tables, hr, paragraphs. No external lib.
