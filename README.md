@@ -7,6 +7,13 @@
 - **Mayank Goyal**, Department of Computer Science and Engineering, Indian Institute of Technology Delhi. ⟨csy247585@iitd.ac.in⟩
 - **Aaditeshwar Seth**, Department of Computer Science and Engineering, Indian Institute of Technology Delhi. ⟨aseth@cse.iitd.ac.in⟩
 
+## Co-Authors
+
+- **Anand kr.p**, Auroville Botanical Gardens. <anand82546@gmail.com>
+- **Kiran Baldwin**, Auroville Botanical Gardens. <kiranbaldwin.avbg@gmail.com>
+- **Shashank Bhardwaj**, Auroville Botanical Gardens. <bhardwajshashank11@gmail.com>
+- **MADHURA NIPHADKAR**, Wildlife Conservation Trust. <madhura@wctindia.org>
+
 ## Abstract
 
 This is an interactive browser for the floristic information in H. G. Champion and S. K. Seth's *A Revised Survey of the Forest Types of India* (Government of India, 1968), joined to site coordinates and to modern accepted plant names. It covers **464 sites** across India (latitude 6.9° N to 34.3° N, longitude 68.7° E to 96.0° E), describing which species occur at which site, in which layer of the forest, at what abundance, and whether the surveyors marked them as particularly characteristic of the forest type. The tool is intended for anyone working on Indian vegetation classification, potential natural vegetation modelling, restoration planning, or floristic biogeography who wants the 1968 survey in a form that can be queried, filtered and mapped.
@@ -88,7 +95,5 @@ The parsed and enriched site list is embedded inside the HTML file as a JavaScri
 - Govaerts, R. and 39 co-authors (2021). The World Checklist of Vascular Plants, a continuously updated resource for exploring global plant diversity. *Scientific Data* 8: 215.
 - Dinerstein, E., Olson, D., Joshi, A. and 45 others (2017). An Ecoregion-Based Approach to Protecting Half the Terrestrial Realm. *BioScience* 67: 534–545.
 
-## Acknowledgements
-We are grateful to Anand Kr. Pandey, Kiran Baldwin, Shashank Bhardwaj and Paul Blanchflower of the Auroville Botanical Gardens, and to Madhura Niphadkar of the Wildlife Conservation Trust, for helpful discussions and for the inspiration to build this browser.
 
 ## Licence
