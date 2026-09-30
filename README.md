@@ -9,10 +9,10 @@
 
 ## Co-Authors
 
-- **Anand kr.p**, Auroville Botanical Gardens. <anand82546@gmail.com>
+- **Anand Kumar Pandey**, Auroville Botanical Gardens. <anand82546@gmail.com>
 - **Kiran Baldwin**, Auroville Botanical Gardens. <kiranbaldwin.avbg@gmail.com>
 - **Shashank Bhardwaj**, Auroville Botanical Gardens. <bhardwajshashank11@gmail.com>
-- **MADHURA NIPHADKAR**, Wildlife Conservation Trust. <madhura@wctindia.org>
+- **Madhura Niphadkar**, Wildlife Conservation Trust. <madhura@wctindia.org>
 
 ## Abstract
 
