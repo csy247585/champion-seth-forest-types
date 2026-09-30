@@ -6,9 +6,6 @@
 
 - **Mayank Goyal**, Department of Computer Science and Engineering, Indian Institute of Technology Delhi. ⟨csy247585@iitd.ac.in⟩
 - **Aaditeshwar Seth**, Department of Computer Science and Engineering, Indian Institute of Technology Delhi. ⟨aseth@cse.iitd.ac.in⟩
-
-## Co-Authors
-
 - **Anand Kumar Pandey**, Auroville Botanical Gardens. <anand82546@gmail.com>
 - **Kiran Baldwin**, Auroville Botanical Gardens. <kiranbaldwin.avbg@gmail.com>
 - **Shashank Bhardwaj**, Auroville Botanical Gardens. <bhardwajshashank11@gmail.com>
